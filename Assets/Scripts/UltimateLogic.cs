@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class UltimateLogic : MonoBehaviour
 {
+    public ScoreDisplay ScoreDisplay;
     public BlockSpawner Spawner;
     public CubeCutter Cutter;
     public BlockMover Mover;
@@ -52,6 +53,7 @@ public class UltimateLogic : MonoBehaviour
                 _currentBlock.transform.localScale = previousBlockScale;
 
                 Mover.moveAlongZ ^= true;
+                ScoreDisplay.AddScore(1);
 
                 if (result == CuttingResult.Perfect)
                 {
