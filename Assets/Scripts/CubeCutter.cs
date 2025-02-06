@@ -31,8 +31,7 @@ public class CubeCutter : MonoBehaviour
         CutByX = 0,
         CutByZ = 2,
     }
-
-    public CuttingAxis TargetAxis;
+    
     public UnityEvent OnCut;
     public bool isCanCut = true;
     public float SmallThreshold = 0.015f;
@@ -82,10 +81,11 @@ public class CubeCutter : MonoBehaviour
         }
 	}
     /*--------------------------------------------------------*/
-    public CuttingResult Cut(Transform victim, Transform cutter, out float newSize)
+    public CuttingResult Cut(CuttingAxis axis, Block victimBlock, Transform cutter, out float newSize)
     {
-        int targetAxis = (int)TargetAxis;
+        int targetAxis = (int)axis;
 
+        Transform victim = victimBlock.transform;
         Vector3 position = victim.position;
         Vector3 scale = victim.localScale;
         
@@ -101,6 +101,7 @@ public class CubeCutter : MonoBehaviour
             Destroy(victim.gameObject);
             
             Block fallingBlock = Instantiate(FallingBlock);
+            fallingBlock.SetColor(victimBlock.BlockColor);
             
             position[targetAxis] = outBlock.position;
             scale[targetAxis] = outBlock.scale;
@@ -122,6 +123,7 @@ public class CubeCutter : MonoBehaviour
         // Split
         {
             Block fallingBlock = Instantiate(FallingBlock);
+            fallingBlock.SetColor(victimBlock.BlockColor);
                 
             position[targetAxis] = outBlock.position;
             scale[targetAxis] = outBlock.scale;
@@ -140,14 +142,5 @@ public class CubeCutter : MonoBehaviour
     public void ToggleAbilityToCut()
     {
         isCanCut = !isCanCut;
-    }
-    /*--------------------------------------------------------*/
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(isCanCut)
-        {
-            Cut(collision.transform, this.transform, out float _);
-            OnCut?.Invoke();
-        }
     }
 }

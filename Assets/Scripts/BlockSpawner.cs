@@ -17,6 +17,11 @@ public class BlockSpawner : MonoBehaviour
         UpdateColors();
     }
 
+    public float GetBlockHeight()
+    {
+        return blockPrefab.transform.localScale.y;
+    }
+
     [ContextMenu("Spawn Block")]
     public Block SpawnBlock()
     {
@@ -36,7 +41,7 @@ public class BlockSpawner : MonoBehaviour
         
         currentBlockColor = blockGradient.Evaluate(blockCurrentProgress);
         currentBackgroundColor = GetRandomColor();
-        mainCamera.backgroundColor = currentBackgroundColor;
+        mainCamera.backgroundColor = blockGradient.Evaluate((blockCurrentProgress + 0.5f) % 1);
     }
 
     private Color GetRandomColor()

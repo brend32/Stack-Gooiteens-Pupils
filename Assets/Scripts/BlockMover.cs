@@ -6,17 +6,15 @@ public class BlockMover : MonoBehaviour
 	public GameObject blockPrefab;
 	public float moveSpeed = 5f;
 	public float bound = 3f;
-	public GameObject currentBlock;
+	public Transform currentBlock;
 	public bool moveAlongZ = false;
 	public bool moveForward = true;
 	
-	private float blockHeight = 0.5f;
 	private float stackHeight = 0f;
 	private float progress;
 
 	private void Start()
 	{
-		currentBlock.transform.localScale = new Vector3(3f, blockHeight, 3f); 
 		moveAlongZ = !moveAlongZ;
 	}
 
@@ -26,19 +24,8 @@ public class BlockMover : MonoBehaviour
 		{
 			MoveBlock();
 		}
-
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			PlaceBlock();
-		}
 	}
 
-	void SpawnBlock()
-	{
-		currentBlock = Instantiate(blockPrefab, new Vector3(-bound, stackHeight, 0), Quaternion.identity);
-		currentBlock.transform.localScale = new Vector3(3f, blockHeight, 3f); 
-		moveAlongZ = !moveAlongZ;
-	}
 
 	void MoveBlock()
 	{
@@ -64,11 +51,8 @@ public class BlockMover : MonoBehaviour
 		currentBlock.transform.position = Vector3.Lerp(from, to, progress);
 	}
 
-	void PlaceBlock()
+	public CubeCutter.CuttingAxis GetCuttingAxis()
 	{
-		if (currentBlock == null) return;
-		stackHeight += blockHeight; 
-		currentBlock = null;
-		Invoke("SpawnBlock", 0.2f);
+		return moveAlongZ ? CubeCutter.CuttingAxis.CutByZ : CubeCutter.CuttingAxis.CutByX;
 	}
 }
